@@ -1,8 +1,6 @@
-import json
 import re
 import sys
 
-from cytoolz import keyfilter
 import six
 
 
@@ -24,10 +22,6 @@ illegal_xml_re = re.compile(u'[%s]' % u''.join(illegal_ranges))
 
 def int2utf8(n):
     return six.u(str(n))
-
-def parse_gs_line(file_line):
-    data = json.loads(file_line)
-    return keyfilter(lambda k: k in ["text", "docId"], data)
 
 def remove_illegal_chars(text):
     return re.sub(illegal_xml_re, '', text)

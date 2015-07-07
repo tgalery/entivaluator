@@ -3,13 +3,13 @@
 Usage: evaluate.py <entity-linker> <gs-file-path> <base-endpoint> <output-file>
 """
 import codecs
+import json
 import logging
 import sys
 
 from docopt import docopt
 
 from annotators.spotlight import get_entities, format_data
-from utils.text import parse_gs_line
 
 SUPPORTED_LINKERS = {"spotlight"}
 logger = logging.getLogger("entivaluator")
@@ -38,7 +38,7 @@ def main(args):
     if infile and outfile:
         logger.info("Starting Entity Linking benchmark")
         for doc in infile:
-            doc_data = parse_gs_line(doc)
+            doc_data = json.loads(doc)
             if ent_linker_name == "spotlight":
                 doc_id = doc_data["docId"]
                 doc_text = doc_data["text"]
