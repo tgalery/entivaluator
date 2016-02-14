@@ -1,7 +1,8 @@
 import requests
-import logging
 
-logger = logging.getLogger("entivaluator")
+from utils.logger import get_logger
+
+logger = get_logger()
 
 
 def check_json_response(response):

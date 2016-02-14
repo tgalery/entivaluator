@@ -14,11 +14,12 @@ clean:
 	rm resources/iitb-sorted.json
 	rm resources/wiki_title_to_id.pkl
 	cd dexter-eval && mvn clean && cd ..
+	rm -r -f output
 
 deps:
 	sudo apt-get install -y git python-librdf maven
 	sudo pip install -r requirements.txt
-	cd dexter-eval && git submodule init && git submodule update && mvn clean assembly:single
+	git submodule update --init --recursive && cd dexter-eval && mvn clean package assembly:single && cd ..
 	mkdir -p output
 
 install: deps data

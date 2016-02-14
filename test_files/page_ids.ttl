@@ -1,0 +1,11 @@
+# started 2015-12-17T06:27:28Z
+<http://dbpedia.org/resource/AccessibleComputing> <http://dbpedia.org/ontology/wikiPageID> "10"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://dbpedia.org/resource/AfghanistanCommunications> <http://dbpedia.org/ontology/wikiPageID> "18"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://dbpedia.org/resource/AfghanistanHistory> <http://dbpedia.org/ontology/wikiPageID> "13"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://dbpedia.org/resource/AfghanistanMilitary> <http://dbpedia.org/ontology/wikiPageID> "20"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://dbpedia.org/resource/AfghanistanTransportations> <http://dbpedia.org/ontology/wikiPageID> "19"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://dbpedia.org/resource/AfghanistanPeople> <http://dbpedia.org/ontology/wikiPageID> "15"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://dbpedia.org/resource/AfghanistanGeography> <http://dbpedia.org/ontology/wikiPageID> "14"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://dbpedia.org/resource/AfghanistanTransnationalIssues> <http://dbpedia.org/ontology/wikiPageID> "21"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://dbpedia.org/resource/AssistiveTechnology> <http://dbpedia.org/ontology/wikiPageID> "23"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://dbpedia.org/resource/Computer_accessibility> <http://dbpedia.org/ontology/wikiPageID> "411964"^^<http://www.w3.org/2001/XMLSchema#integer> .

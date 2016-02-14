@@ -3,15 +3,16 @@ try:
     import cPickle as pickle
 except ImportError:
     import pickle
-import logging
 
 import bz2file
 import gzip
 import RDF
 
+from utils.logger import get_logger
+
 DBPEDIA_RES_URI = "http://dbpedia.org/resource/"
 
-logger = logging.getLogger("entivaluator")
+logger = get_logger()
 
 
 def open_file(file_path):
@@ -85,7 +86,7 @@ def generate_subject_object_map(file_path, prefix=None):
     return return_map
 
 
-def generate_title_id_map(redirecs_file_path, title_ids_file_path, output_file_path):
+def generate_title_id_map(redirecs_file_path, title_ids_file_path, output_file_path=None):
     """
     A function that generates a map from subj->obj
     :param redirecs_file_path: str: path_to_transitive_redirects
@@ -98,13 +99,26 @@ def generate_title_id_map(redirecs_file_path, title_ids_file_path, output_file_p
     title_ids_map = generate_subject_object_map(title_ids_file_path, DBPEDIA_RES_URI)
     counter = 0
     for title, page_id in title_ids_map.items():
-        resolved_title = redirects_map.get(title, title)
-        resolved_title_id_map[resolved_title] = int(page_id)
+        # Let's get the redirect and return the original title if no redirect
+        title = redirects_map.get(title, title)
+        # Check to see if title in the id map.
+        if title in title_ids_map:
+            page_id = title_ids_map[title]
+        else:
+            logger.warning("Could not find a page id for title %s, weird.", page_id)
+        # Add title there
+        if title not in resolved_title_id_map:
+            resolved_title_id_map[title] = page_id
+        else:
+            logger.info("Skipping %s because it's already there.", title)
+        # increment counter
         counter += 1
         if counter % 1000 == 0:
             logger.info("Processed %i items.", counter)
     # Dumple the resolved file
-    logger.info("Dumping processed id map to %s .", output_file_path)
-    with codecs.open(output_file_path, "w") as out_file:
-        pickle.dump(resolved_title_id_map, out_file, pickle.HIGHEST_PROTOCOL)
-    logger.info("Finished.")
+    if output_file_path:
+        logger.info("Dumping processed id map to %s .", output_file_path)
+        with codecs.open(output_file_path, "w") as out_file:
+            pickle.dump(resolved_title_id_map, out_file, pickle.HIGHEST_PROTOCOL)
+        logger.info("Finished.")
+    return resolved_title_id_map

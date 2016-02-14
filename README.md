@@ -6,45 +6,51 @@ This is a command line tool to help evaluate entity linking systems using [dexte
 
 #### Clone
 
-Clone this repo, to begin with. You also need to clone and build [dexter-eval](https://github.com/diegoceccarelli/dexter-eval) so this has any use. Go ahead and do that.
+Clone this repo, to begin with. Once you have it, cd into it and run `make install`.
+This will do the following:
 
-#### Libraries
-
-The package comes with a `requirements.txt` file, so a simple `pip install -r requirements.txt` would do. If you install outside the python system libraries, make sure that the libs are added to the python path.
-
-#### Data
-
-In order to evaluate entity linking systems, you need to convert dbpedia/wikipedia titles to their corresponding numerical ids. I have prepared a json file with the titles as keys and the numerical ids as values.  The program expects this file to be in the `resources` folder. To download it, you need to run:
-
-1. `cd resources`
-2. `wget -O wiki_title_to_id.json.tgz -v https://googledrive.com/host/0B7wSO4JK9zbFeHRTYmJGa2ZjTU0`
-3. `tar -xzvf wiki_title_to_id.json.tgz`
-
-Note that the program presupposes the file to be named `wiki_title_to_id.json`, so make sure that's the correct filename of the json file. Dexter-eval comes with the iitb dataset, you can unpack that file and use it, but if you want to download a version of that, you can simply unpack the version that comes in the resources folder.
-
-* `tar -xzvf iitb-sorted.json.tgz`
+1. Install some dependencies (sudo password will be prompted, at the moment only debian systems are supported, but otherwise you can just pip install the requirements and use `make data`)
+2. Pull the stable version of `dexter-eval` and build it.
+3. Download a pre-processed dictionary of wiki titles -> ids (you can do this by issuing `make data`)
+4. Create an `output` folder where some of the output will be stored.
 
 ### Usage
 
+#### Specifying gold standards and output paths from the command line
+
 From the root of this repo, you can use a command with the following syntax:
 
-*  `python evaluate.py <entity-linker> <gold-standard-json-file> <entity-extraction-endpoint> <output-file.tsv>`
+*  `python evaluate.py with-dexter-eval <entity-linker> <gold-standard-json-file> <output-file.tsv>`
 
 In this command, the following holds:
 
 * `<entity-linker>` the name of the entity linking system you are testing. At the moment only `spotlight` is supported.
 * `<gold-standard-json-file>` the gold standard file that contains the text and entities, i.e. `resources.iitb-sorted.json`
-* `<entity-extraction-endpoint>` the endpoint of the service that extracts entities. If you are using DBpedia Spotlight locally, this is probably `http://localhost:2222/rest/annotate`
 * `<output-file.tsv>` this the path to a filename which the tool will create. Make sure it ends with `.tsv` otherwise dexter eval might not parse it.
 
 
-Once the output file is generated and assuming you have dexter eval installed and compiled. You can run comparison for your system by doing:
+This will generate a tsv file which in turn is feed into dexter-eval's evaluation module.
+You will see some scores printed on the screen.
+Also, a resulting file with a `dexter_out.tsv` suffix should appear in the output folder.
+This is a simple `tsv` file with precision, recall and f1 scores.
 
-* `<path-to-dexter-eval>/scripts/evaluate.sh <output-file.tsv> <gold-standard-json-file> <Metric> <Config>`
+Note that `entivaluator` assumes the configuration specified in `dexter_macro_conf.txt`. 
+Moreover, the metric chosen is the weak mention annotation or `Mwa`, that is:
+two annotations are considered to be the same, if the surface forms overall and they refer to the same entity.
+If you want to chose a different metric or measure, you might try to use [dexter-eval](https://github.com/diegoceccarelli/dexter-eval) as a CLI tool against the `.tsv` file produced by the step above manually.
 
-Note that the `<Metric>` and `<Config>` are specified in the [dexter-eval documentation](https://github.com/diegoceccarelli/dexter-eval), so I would refer to that.
+
+#### Bundled Data
+
+This repo comes with the `iitb`, `ACQUAINT` and `MSNBC` data sets.
+If you want to evaluate your entity linker against all of those, you can run:
+
+`python evaluate.py all-with-dexter-eval <entity-linker>`
+
+This command basically loops over each dataset (in `resources`),
+creates a datastamp and uses that and the name of the entity linker to create `.tsv` files in the `output` folder.
 
 ### Contributions
 
-It would be nice to (i) have tests, (ii) have python 3 support, (iii) support more entity linking systems, and (iv) support more datasets. So if you feel like contributing in any of those areas it would be much appreciated.
+It would be nice to (i) have tests, (ii) have python 3 support, (iii) support more entity linking systems, and (iv) support more datasets. So why don't you ?
 

@@ -1,19 +1,19 @@
-import logging
-
 from annotators.conf import RESOURCES, ENDPOINTS
 from utils.html import check_json_response, post_request
 from utils.text import remove_illegal_chars
 from utils.store import get_wiki_store
+from utils.logger import get_logger
 
 
-logger = logging.getLogger("entivaluator")
+logger = get_logger()
 wiki_id_db = get_wiki_store(RESOURCES["title_to_id"])
 
 
-def get_entities(text, conf=0.4):
+def get_entities(text, conf=0.45):
     """
     A function to get annotations.
     :param text: str: text to annotate
+    :param conf: float: confidence
     :return: list
     """
 
@@ -44,7 +44,7 @@ def format_data(json_response):
                 start = int(ent["@offset"])
                 end = start + len(surface_form)
                 output.append([surface_form, unicode(start), unicode(end),
-                               unicode(wiki_id), title, score])
+                               wiki_id, title, score])
             except Exception:
                 logger.warning("Could not find wikipedia id for title: %s", title)
                 continue
