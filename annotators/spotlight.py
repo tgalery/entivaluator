@@ -2,7 +2,7 @@ import logging
 
 from annotators.conf import RESOURCES, ENDPOINTS
 from utils.html import check_json_response, post_request
-from utils.text import int2utf8, remove_illegal_chars
+from utils.text import remove_illegal_chars
 from utils.store import get_wiki_store
 
 
@@ -26,6 +26,11 @@ def get_entities(text, conf=0.4):
 
 
 def format_data(json_response):
+    """
+    A function for formatting output data in a dexter-eval format.
+    :param text: str: text to annotate
+    :return: list
+    """
     output = []
     key = "Resources"
     if json_response and key in json_response and json_response[key]:
@@ -38,7 +43,8 @@ def format_data(json_response):
                 score = ent["@percentageOfSecondRank"]
                 start = int(ent["@offset"])
                 end = start + len(surface_form)
-                output.append([surface_form, int2utf8(start), int2utf8(end), wiki_id, title, score])
+                output.append([surface_form, unicode(start), unicode(end),
+                               unicode(wiki_id), title, score])
             except Exception:
                 logger.warning("Could not find wikipedia id for title: %s", title)
                 continue

@@ -1,8 +1,10 @@
 .PHONY: install
 
 help:
-	@echo "install install dependencies"
+	@echo "install dependencies"
 
 install:
-	apt-get install -y python-librdf
+	apt-get install -y git python-librdf maven
 	pip install -r requirements.txt
+	cd dexter-eval && git submodule init && git submodule update && mvn clean assembly:single
+

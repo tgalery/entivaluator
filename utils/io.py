@@ -99,7 +99,7 @@ def generate_title_id_map(redirecs_file_path, title_ids_file_path, output_file_p
     counter = 0
     for title, page_id in title_ids_map.items():
         resolved_title = redirects_map.get(title, title)
-        resolved_title_id_map[resolved_title] = page_id
+        resolved_title_id_map[resolved_title] = int(page_id)
         counter += 1
         if counter % 1000 == 0:
             logger.info("Processed %i items.", counter)

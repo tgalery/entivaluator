@@ -29,5 +29,3 @@ def post_request(url, payload, headers):
         return response
     except requests.exceptions.RequestException as ex:
         logger.warning("Failed to submit data to %s and got a : %s ", url, ex)
-
-

@@ -4,9 +4,7 @@ try:
 except ImportError:
     import pickle
 
-import json
 import logging
-from os.path import realpath
 
 logger = logging.getLogger("entivaluator")
 
