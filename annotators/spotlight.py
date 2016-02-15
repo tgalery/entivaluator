@@ -1,4 +1,4 @@
-from annotators.conf import RESOURCES, ENDPOINTS
+from annotators.conf import TITLE_TO_ID, ENDPOINTS
 from utils.html import check_json_response, post_request
 from utils.text import remove_illegal_chars
 from utils.store import get_wiki_store
@@ -6,7 +6,7 @@ from utils.logger import get_logger
 
 
 logger = get_logger()
-wiki_id_db = get_wiki_store(RESOURCES["title_to_id"])
+wiki_id_db = get_wiki_store(TITLE_TO_ID["spotlight"])
 
 
 def get_entities(text, conf=0.45):

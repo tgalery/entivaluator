@@ -4,6 +4,7 @@ Usage:
     evaluate.py gen-report <entity-linker> <gs-file-path> <output-file>
     evaluate.py with-dexter-eval <entity-linker> <gs-file-path> <output-file>
     evaluate.py all-with-dexter-eval <entity-linker>
+    evaluate.py gen-id-store <redirects-path> <page-ids-path> <output-path>
 
 """
 import codecs
@@ -18,6 +19,7 @@ from docopt import docopt
 
 from annotators.spotlight import get_entities, format_data
 from utils.logger import get_logger
+from utils.io import generate_title_id_map
 
 SUPPORTED_LINKERS = {"spotlight"}
 BASE_DIR = path.dirname(path.realpath(__file__))
@@ -39,7 +41,7 @@ def gen_report(infile_path, outfile_path, linker_name):
     """
     A function to generate a report that can be used by dexter.
     :param infile_path: str: input gold standard
-    :param outfile_path: str: ouput of tsv predictions
+    :param outfile_path: str: output of tsv predictions
     :param linker_name: str: name of entity linker
     """
 
@@ -68,8 +70,8 @@ def with_dexter_eval(infile, outfile, ent_linker_name):
     """
     A function to generate a report that can be used by dexter.
     :param infile: str: input gold standard
-    :param outfile: str: ouput of tsv predictions
-    :parm ent_linker_name: str: name of entity linker
+    :param outfile: str: output of tsv predictions
+    :param ent_linker_name: str: name of entity linker
     """
     gen_report(infile, outfile, ent_linker_name)
     logger.info("Running benchmarks using dexter-eval framework.")
@@ -81,10 +83,10 @@ def with_dexter_eval(infile, outfile, ent_linker_name):
     output, err = proc.communicate()
     logger.info("Finished running dexter eval. \n")
     logger.info("%s", output)
-    output_tupples = re.findall(EXP, output)
-    precision = output_tupples[0][1]
-    recall = output_tupples[1][1]
-    f1 = output_tupples[2][1]
+    output_tuples = re.findall(EXP, output)
+    precision = output_tuples[0][1]
+    recall = output_tuples[1][1]
+    f1 = output_tuples[2][1]
     base_file_name = outfile.split(".tsv")[0].rsplit("/", 1)[1]
     dexter_file_path = BASE_DIR + "/output/{}_dexter_out.tsv".format(base_file_name)
     with open(dexter_file_path, "w") as dexter_out:
@@ -127,6 +129,9 @@ def main(args):
                 path.realpath(out_file_name),
                 ent_linker_name)
 
+    if args["gen-id-store"]:
+        logger.info("Generating id stores at %s ", args["<output-path>"])
+        _ = generate_title_id_map(args["<redirects-path>"], args["<page-ids-path>"], args["<output-path>"])
 
 if __name__ == '__main__':
     """

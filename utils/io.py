@@ -86,16 +86,16 @@ def generate_subject_object_map(file_path, prefix=None):
     return return_map
 
 
-def generate_title_id_map(redirecs_file_path, title_ids_file_path, output_file_path=None):
+def generate_title_id_map(redirects_file_path, title_ids_file_path, output_file_path=None):
     """
     A function that generates a map from subj->obj
-    :param redirecs_file_path: str: path_to_transitive_redirects
+    :param redirects_file_path: str: path_to_transitive_redirects
     :param title_ids_file_path: str: path_to_page_ids
     :param output_file_path: str: path to where resulting id map is saved
 
     """
     resolved_title_id_map = dict()
-    redirects_map = generate_subject_object_map(redirecs_file_path, DBPEDIA_RES_URI)
+    redirects_map = generate_subject_object_map(redirects_file_path, DBPEDIA_RES_URI)
     title_ids_map = generate_subject_object_map(title_ids_file_path, DBPEDIA_RES_URI)
     counter = 0
     for title, page_id in title_ids_map.items():
@@ -110,12 +110,12 @@ def generate_title_id_map(redirecs_file_path, title_ids_file_path, output_file_p
         if title not in resolved_title_id_map:
             resolved_title_id_map[title] = page_id
         else:
-            logger.info("Skipping %s because it's already there.", title)
+            logger.debug("Skipping %s because it's already there.", title)
         # increment counter
         counter += 1
         if counter % 1000 == 0:
             logger.info("Processed %i items.", counter)
-    # Dumple the resolved file
+    # Dump the resolved file
     if output_file_path:
         logger.info("Dumping processed id map to %s .", output_file_path)
         with codecs.open(output_file_path, "w") as out_file:
