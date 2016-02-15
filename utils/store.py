@@ -1,15 +1,26 @@
 import codecs
 import json
-import logging
-from os.path import realpath
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 
-logger = logging.getLogger("entivaluator")
+from utils.logger import get_logger
 
-def get_wiki_store():
-    resource = realpath(__file__).rsplit("/utils")[0] + "/resources/wiki_title_to_id.json"
-    logger.info("Loading Wiki Id map")
-    wiki_file = codecs.open(resource, "r", "utf8")
-    wiki_store = json.load(wiki_file)
-    wiki_file.close()
-    logger.info("Finishing loading Wiki Id map")
-    return wiki_store
+logger = get_logger()
+
+
+# resource = realpath(__file__).rsplit("/utils")[0] + "/resources/wiki_title_to_id.pkl"
+def get_wiki_store(path_to_file):
+    """
+    A function that loads a title -> id dictionary
+    :param path_to_file: str: path to pkl file
+    :return dict:
+    """
+
+    logger.info("Loading Wiki Id map from %s", path_to_file)
+    in_file = codecs.open(path_to_file)
+    if path_to_file.endswith(".pkl"):
+        return pickle.load(in_file)
+    elif path_to_file.endswith(".json"):
+        return json.load(in_file)
