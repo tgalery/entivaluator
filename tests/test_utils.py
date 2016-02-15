@@ -23,12 +23,13 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(page_id_map["AccessibleComputing"], "10")
 
     def test_generate_subject_object_map_redirects(self):
-        page_id_map = io.generate_subject_object_map(REDIRECTS,
+        redir_id_map = io.generate_subject_object_map(REDIRECTS,
                                                      io.DBPEDIA_RES_URI)
-        self.assertEqual(page_id_map["AccessibleComputing"], "Computer_accessibility")
+        self.assertEqual(redir_id_map["AccessibleComputing"], "Computer_accessibility")
 
     def test_generate_title_id_map(self):
         resolved_title_id_map = io.generate_title_id_map(REDIRECTS, PAGE_IDS)
         self.assertEqual(resolved_title_id_map["Computer_accessibility"], "411964")
         # To review the test case below
+        print resolved_title_id_map
         self.assertTrue("AccessibleComputing" not in resolved_title_id_map)
