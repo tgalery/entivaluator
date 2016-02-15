@@ -17,7 +17,7 @@ import sys
 
 from docopt import docopt
 
-from annotators.spotlight import get_entities, format_data
+
 from utils.logger import get_logger
 from utils.io import generate_title_id_map
 
@@ -105,6 +105,7 @@ def main(args):
         _ = generate_title_id_map(args["<redirects-path>"], args["<page-ids-path>"], args["<output-path>"])
         sys.exit(0)
 
+    from annotators.spotlight import get_entities, format_data
     ent_linker_name = args["<entity-linker>"].lower()
 
     # generate report

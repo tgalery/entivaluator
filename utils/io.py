@@ -61,29 +61,37 @@ def iterate_rdf_triples(file_path):
                 yield statement.subject, statement.predicate, statement.object
 
 
+def tuple_generator(file_path, prefix=None):
+    """
+    A funtion that returns a tuple generator
+    :param file_path: str: file_to_process
+    :return: tuple
+    """
+    rdf_tuple_iterator = iterate_rdf_triples(file_path)
+    counter = 0
+    for subj, _, obj in rdf_tuple_iterator:
+        
+        subj = unicode(subj)
+        obj = unicode(obj)
+        if prefix:
+            subj = subj.replace(prefix, "")
+            obj = obj.replace(prefix, "")
+        counter += 1
+        if counter % 1000 == 0:
+            logger.info("Processed %i items.", counter)
+
+        yield subj, obj
+
+
 def generate_subject_object_map(file_path, prefix=None):
     """
     A function that generates a map from subj->obj
     :param file_path: str: file_to_process
     :return: dict
     """
-    return_map = dict()
-    rdf_tuple_iterator = iterate_rdf_triples(file_path)
-    counter = 0
-    for subj, _, obj in rdf_tuple_iterator:
-        subj = unicode(subj)
-        obj = unicode(obj)
-        if prefix:
-            subj = subj.replace(prefix, "")
-            obj = obj.replace(prefix, "")
-        if subj not in return_map:
-            return_map[subj] = obj
-        else:
-            logger.info("%s is in return map, object %s will be skipped.", subj, obj)
-        counter += 1
-        if counter % 1000 == 0:
-            logger.info("Processed %i items.", counter)
-    return return_map
+    
+    subj_obj_generator = tuple_generator(file_path, prefix)
+    return dict(subj_obj_generator)
 
 
 def generate_title_id_map(redirects_file_path, title_ids_file_path, output_file_path=None):
