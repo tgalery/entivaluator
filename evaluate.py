@@ -100,6 +100,11 @@ def main(args):
     :param args: list: command line args
     """
 
+    if args["gen-id-store"]:
+        logger.info("Generating id stores at %s ", args["<output-path>"])
+        _ = generate_title_id_map(args["<redirects-path>"], args["<page-ids-path>"], args["<output-path>"])
+        sys.exit(0)
+
     ent_linker_name = args["<entity-linker>"].lower()
 
     # generate report
@@ -129,9 +134,6 @@ def main(args):
                 path.realpath(out_file_name),
                 ent_linker_name)
 
-    if args["gen-id-store"]:
-        logger.info("Generating id stores at %s ", args["<output-path>"])
-        _ = generate_title_id_map(args["<redirects-path>"], args["<page-ids-path>"], args["<output-path>"])
 
 if __name__ == '__main__':
     """
