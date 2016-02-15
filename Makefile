@@ -8,7 +8,7 @@ help:
 
 data:
 	cd resources && tar -xzvf iitb-sorted.json.tgz && cd ..
-	wget -O resources/wiki_title_to_id.pkl.tgz -v https://googledrive.com/host/0B7wSO4JK9zbFakRhenVxZUxkZk0 && cd resources && tar -xzvf wiki_title_to_id.pkl.tgz && cd ..
+	wget -O resources/wiki_title_to_id.pkl.tgz -v https://googledrive.com/host/0B7wSO4JK9zbFanFTbUJ4WFROYms && cd resources && tar -xzvf wiki_title_to_id.pkl.tgz && cd ..
 
 clean:
 	rm resources/iitb-sorted.json
