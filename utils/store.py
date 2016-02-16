@@ -18,8 +18,11 @@ def get_wiki_store(path_to_file):
     """
 
     logger.info("Loading Wiki Id map from %s", path_to_file)
-    in_file = codecs.open(path_to_file)
-    if path_to_file.endswith(".pickle"):
-        return pickle.load(in_file)
-    elif path_to_file.endswith(".json"):
-        return json.load(in_file)
+    try:
+        in_file = codecs.open(path_to_file)
+        if path_to_file.endswith(".pickle"):
+            return pickle.load(in_file)
+        elif path_to_file.endswith(".json"):
+            return json.load(in_file)
+    except IOError:
+        logger.info("Could not read store path from config. Creating a new one via CLI.")
