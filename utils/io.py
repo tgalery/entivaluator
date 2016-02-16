@@ -4,10 +4,10 @@ try:
 except ImportError:
     import pickle
 
-import bz2file
-import gzip
 import RDF
 
+from six import text_type, binary_type
+from six.moves.urllib.parse import unquote
 from utils.logger import get_logger
 
 DBPEDIA_RES_URI = "http://dbpedia.org/resource/"
@@ -15,18 +15,27 @@ DBPEDIA_RES_URI = "http://dbpedia.org/resource/"
 logger = get_logger()
 
 
-def open_file(file_path):
+def convert_to_bytes(input_str):
     """
-    A function to open files in different extensions.
-    :param file_path: str: path to input file
-    :return: function
+    A function for converting a unicode to by string
+
+    :param input_str: Unicode: String to be converted
+    :return Bytes
     """
-    open_fn = codecs.open
-    if file_path.endswith(".bz2"):
-        open_fn = bz2file.open
-    elif file_path.endswith(".gz"):
-        open_fn = gzip.open
-    return open_fn
+    if isinstance(input_str, text_type):
+        input_str = input_str.encode("utf-8")
+    return input_str
+
+def convert_to_unicode(input_str):
+    """
+    A function for converting a unicode to by string
+
+    :param input_str: bytes: string to be converted
+    :return unicode
+    """
+    if isinstance(input_str, binary_type):
+        input_str = input_str.decode("utf-8")
+    return input_str
 
 
 def get_rdf_parser(file_path):
@@ -44,42 +53,42 @@ def get_rdf_parser(file_path):
         raise ValueError("RDF parser for extension of file %s is not implemented.", file_path)
 
 
+def normalize(node):
+    """
+    A function to normalize some nodes"
+    :param node: RDF.Node
+    :return: unicode
+    """
+    return convert_to_unicode(unquote(convert_to_bytes(unicode(node))))
+
+
 def iterate_rdf_triples(file_path):
     """
     A function that iterates over the lines of an rdf file and parse the lines.
     :param file_path:
     :return: generator
     """
-    open_fn = open_file(file_path)
     rdf_parser = get_rdf_parser(file_path)
-    with open_fn(file_path, "r") as in_file:
-        for rdf_line in in_file:
-            # we use a dummy "." base uri to parse the triples
-            # and satisfy their api.
-            rdf_stream = rdf_parser.parse_string_as_stream(rdf_line, ".")
-            for statement in rdf_stream:
-                yield statement.subject, statement.predicate, statement.object
+    stream = rdf_parser.parse_as_stream("file:" + file_path)
+    for statement in stream:
+        yield normalize(statement.subject), normalize(statement.predicate), normalize(statement.object)
 
 
 def tuple_generator(file_path, prefix=None):
     """
-    A funtion that returns a tuple generator
+    A function that returns a tuple generator
     :param file_path: str: file_to_process
     :return: tuple
     """
     rdf_tuple_iterator = iterate_rdf_triples(file_path)
     counter = 0
     for subj, _, obj in rdf_tuple_iterator:
-        
-        subj = unicode(subj)
-        obj = unicode(obj)
         if prefix:
             subj = subj.replace(prefix, "")
             obj = obj.replace(prefix, "")
         counter += 1
-        if counter % 1000 == 0:
+        if counter % 10000 == 0:
             logger.info("Processed %i items.", counter)
-
         yield subj, obj
 
 
@@ -121,7 +130,7 @@ def generate_title_id_map(redirects_file_path, title_ids_file_path, output_file_
             logger.debug("Skipping %s because it's already there.", title)
         # increment counter
         counter += 1
-        if counter % 1000 == 0:
+        if counter % 10000 == 0:
             logger.info("Processed %i items.", counter)
     # Dump the resolved file
     if output_file_path:

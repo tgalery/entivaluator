@@ -10,7 +10,6 @@ from utils.logger import get_logger
 logger = get_logger()
 
 
-# resource = realpath(__file__).rsplit("/utils")[0] + "/resources/wiki_title_to_id.pkl"
 def get_wiki_store(path_to_file):
     """
     A function that loads a title -> id dictionary
@@ -20,7 +19,7 @@ def get_wiki_store(path_to_file):
 
     logger.info("Loading Wiki Id map from %s", path_to_file)
     in_file = codecs.open(path_to_file)
-    if path_to_file.endswith(".pkl"):
+    if path_to_file.endswith(".pickle"):
         return pickle.load(in_file)
     elif path_to_file.endswith(".json"):
         return json.load(in_file)

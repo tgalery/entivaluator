@@ -14,7 +14,7 @@ REDIRECTS = BASE_DIR + "test_files/transitive_redirects.ttl"
 
 class TestUtils(unittest.TestCase):
     """
-    A class that tests the wikidata module
+    A class that tests the utils module
     """
 
     def test_generate_subject_object_map_page_ids(self):
@@ -23,9 +23,11 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(page_id_map["AccessibleComputing"], "10")
 
     def test_generate_subject_object_map_redirects(self):
-        page_id_map = io.generate_subject_object_map(REDIRECTS,
+        redirects_map = io.generate_subject_object_map(REDIRECTS,
                                                      io.DBPEDIA_RES_URI)
-        self.assertEqual(page_id_map["AccessibleComputing"], "Computer_accessibility")
+        self.assertEqual(redirects_map["AccessibleComputing"], "Computer_accessibility")
+        self.assertEqual(redirects_map["O2_plc"], u"Telefónica_O2")
+        self.assertEqual(redirects_map[u"Antônio_Osório"], u"Antônio_H_Osório")
 
     def test_generate_title_id_map(self):
         resolved_title_id_map = io.generate_title_id_map(REDIRECTS, PAGE_IDS)
