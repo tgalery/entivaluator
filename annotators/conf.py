@@ -2,7 +2,7 @@ from os.path import realpath, join
 
 try:
     spotlight_path = join(realpath(__file__).rsplit("/annotators")[0],
-                          "resources/wiki_title_to_id.pkl")
+                          "resources/wiki_title_to_id.pickle")
 except Exception:
     spotlight_path = None
 

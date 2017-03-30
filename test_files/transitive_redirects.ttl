@@ -8,3 +8,5 @@
 <http://dbpedia.org/resource/AlbaniaHistory> <http://dbpedia.org/ontology/wikiPageRedirects> <http://dbpedia.org/resource/History_of_Albania> .
 <http://dbpedia.org/resource/AfghanistanCommunications> <http://dbpedia.org/ontology/wikiPageRedirects> <http://dbpedia.org/resource/Communications_in_Afghanistan> .
 <http://dbpedia.org/resource/AsWeMayThink> <http://dbpedia.org/ontology/wikiPageRedirects> <http://dbpedia.org/resource/As_We_May_Think> .
+<http://dbpedia.org/resource/O2_plc> <http://dbpedia.org/ontology/wikiPageRedirects> <http://dbpedia.org/resource/Telef%C3%B3nica_O2> .
+<http://dbpedia.org/resource/Antônio_Osório> <http://dbpedia.org/ontology/wikiPageRedirects> <http://dbpedia.org/resource/Antônio_H_Osório> .
